@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interaktywny Formularz Finansowania</title>
+    <style>
+        body { background-color: #000C69; color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 40px 20px; }
+        .intro-text { max-width: 700px; text-align: center; margin-bottom: 30px; font-size: 16px; line-height: 1.6; }
+        .form-container { background-color: #000000; padding: 40px; border-radius: 10px; box-shadow: 0 0 20px rgba(255, 255, 255, 0.15); width: 100%; max-width: 700px; }
+        h2, h3 { text-align: center; color: #ffffff; margin-bottom: 20px; font-weight: 500; }
+        h3 { margin-top: 30px; border-bottom: 1px solid #000C69; padding-bottom: 10px; }
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; margin-bottom: 8px; color: #ffffff; font-size: 14px; }
+        .input-group input, .input-group select, .input-group textarea { width: 100%; padding: 12px; border: 1px solid #ffffff; border-radius: 5px; background-color: #000C69; color: #ffffff; box-sizing: border-box; font-size: 16px; }
+        .input-group input:focus, .input-group select:focus, .input-group textarea:focus { outline: none; box-shadow: 0 0 5px #ffffff; }
+        textarea { resize: vertical; min-height: 80px; }
+        button { width: 100%; padding: 15px; border: none; border-radius: 5px; background-color: #ffffff; color: #000000; font-size: 16px; font-weight: bold; cursor: pointer; transition: background-color 0.3s, color 0.3s; margin-top: 20px; }
+        button:hover { background-color: #dddddd; }
+    </style>
+</head>
+<body>
+    <div class="intro-text">
+        <p>Witaj!</p>
+        <p>Poniżej znajduje się formularz, który należy uzupełnić w celu przygotowania analizy finansowej. Po wypełnieniu wszystkich pól, proszę kliknąć przycisk "ZOBACZ PODSUMOWANIE", aby przejść do strony z podsumowaniem danych.</p>
+    </div>
+    <div class="form-container">
+        <h2>Dane do uzupełnienia:</h2>
+        <form id="dataForm">
+            <h3>Dane Osobowe</h3>
+            <div class="input-group"><label for="imiona_nazwisko">Imię (imiona) i nazwisko:</label><input type="text" id="imiona_nazwisko" name="imiona_nazwisko" required></div>
+            <div class="input-group"><label for="pesel">PESEL:</label><input type="text" id="pesel" name="pesel" required pattern="\d{11}"></div>
+            <div class="input-group"><label for="email">Adres mailowy:</label><input type="email" id="email" name="email" required></div>
+            <div class="input-group"><label for="telefon">Numer telefonu:</label><input type="tel" id="telefon" name="telefon" required></div>
+            <div class="input-group"><label for="dowod">Numer dowodu osobistego:</label><input type="text" id="dowod" name="dowod" required></div>
+            <div class="input-group"><label for="dowod_wydanie">Data wydania dowodu osobistego:</label><input type="date" id="dowod_wydanie" name="dowod_wydanie" required></div>
+            <div class="input-group"><label for="dowod_waznosc">Data ważności dowodu osobistego:</label><input type="date" id="dowod_waznosc" name="dowod_waznosc" required></div>
+            <div class="input-group"><label for="miejsce_urodzenia">Miejsce urodzenia:</label><input type="text" id="miejsce_urodzenia" name="miejsce_urodzenia" required></div>
+            <div class="input-group"><label for="nazwisko_rodowe_matki">Nazwisko rodowe matki:</label><input type="text" id="nazwisko_rodowe_matki" name="nazwisko_rodowe_matki" required></div>
+            <div class="input-group"><label for="imiona_rodzicow">Imiona rodziców:</label><input type="text" id="imiona_rodzicow" name="imiona_rodzicow" required></div>
+            </form>
+        <button id="submitBtn">ZOBACZ PODSUMOWANIE</button>
+    </div>
+
+    <script>
+        document.getElementById('submitBtn').addEventListener('click', function(event) {
+            // Zatrzymujemy domyślną akcję formularza
+            event.preventDefault();
+
+            // Sprawdzamy, czy formularz jest poprawnie wypełniony
+            const form = document.getElementById('dataForm');
+            if (!form.checkValidity()) {
+                // Jeśli nie, pokazujemy natywne komunikaty przeglądarki
+                form.reportValidity();
+                return;
+            }
+
+            // Tworzymy obiekt do przechowywania danych
+            const formData = {};
+            const formElements = form.elements;
+
+            // Przechodzimy przez wszystkie pola formularza i zbieramy ich wartości
+            for (let i = 0; i < formElements.length; i++) {
+                const element = formElements[i];
+                if (element.name) {
+                    formData[element.name] = element.value;
+                }
+            }
+
+            // Konwertujemy obiekt na tekst (JSON) i zapisujemy w localStorage
+            localStorage.setItem('daneFormularza', JSON.stringify(formData));
+
+            // Przekierowujemy użytkownika na stronę podsumowania
+            window.location.href = 'podsumowanie.html';
+        });
+    </script>
+</body>
+</html>
