@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Podsumowanie Danych</title>
+    <style>
+        body { background-color: #000C69; color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 40px 20px; }
+        .summary-container { background-color: #000000; padding: 40px; border-radius: 10px; box-shadow: 0 0 20px rgba(255, 255, 255, 0.15); width: 100%; max-width: 700px; }
+        h2 { text-align: center; color: #ffffff; margin-bottom: 30px; }
+        .data-row { display: flex; margin-bottom: 12px; font-size: 16px; border-bottom: 1px solid #000C69; padding-bottom: 12px; }
+        .data-label { font-weight: bold; color: #bbbbbb; width: 40%; min-width: 200px; padding-right: 15px; }
+        .data-value { width: 60%; word-break: break-all; }
+        .no-data { text-align: center; font-size: 18px; }
+    </style>
+</head>
+<body>
+    <div class="summary-container" id="summaryContainer">
+        <h2>Podsumowanie wprowadzonych danych</h2>
+        </div>
+
+    <script>
+        window.onload = function() {
+            // Odczytujemy dane ze schowka localStorage
+            const jsonData = localStorage.getItem('daneFormularza');
+            const summaryContainer = document.getElementById('summaryContainer');
+
+            if (jsonData) {
+                // Jeśli dane istnieją, konwertujemy je z powrotem na obiekt
+                const formData = JSON.parse(jsonData);
+
+                // Tworzymy mapowanie nazw pól na bardziej czytelne etykiety
+                const labels = {
+                    'imiona_nazwisko': 'Imię i nazwisko',
+                    'pesel': 'PESEL',
+                    'email': 'Adres e-mail',
+                    'telefon': 'Numer telefonu',
+                    'dowod': 'Numer dowodu',
+                    // Dodaj tutaj resztę etykiet dla wszystkich pól
+                };
+
+                // Iterujemy przez dane i wyświetlamy je na stronie
+                for (const key in formData) {
+                    if (formData.hasOwnProperty(key) && formData[key]) {
+                        const labelText = labels[key] || key; // Użyj etykiety z mapy lub klucza, jeśli nie ma
+                        const valueText = formData[key];
+
+                        const row = document.createElement('div');
+                        row.className = 'data-row';
+
+                        const label = document.createElement('div');
+                        label.className = 'data-label';
+                        label.textContent = labelText + ':';
+                        
+                        const value = document.createElement('div');
+                        value.className = 'data-value';
+                        value.textContent = valueText;
+
+                        row.appendChild(label);
+                        row.appendChild(value);
+                        summaryContainer.appendChild(row);
+                    }
+                }
+                
+                // (Opcjonalnie) Czyścimy dane po ich wyświetleniu, aby nie zalegały w przeglądarce
+                // localStorage.removeItem('daneFormularza');
+
+            } else {
+                // Informacja, jeśli ktoś wejdzie na tę stronę bezpośrednio
+                summaryContainer.innerHTML = '<h2>Brak danych do wyświetlenia</h2><p class="no-data">Proszę najpierw wypełnić formularz.</p>';
+            }
+        };
+    </script>
+</body>
+</html>
